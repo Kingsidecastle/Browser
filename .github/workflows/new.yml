@@ -127,7 +127,15 @@ jobs:
           name: rdp-credentials
           path: rdp-credentials.txt
           retention-days: 1
-          
+      
+      - name: Keep session alive
+        run: |
+          Write-Host "Session active. Cancel the workflow when finished."
+          while ($true) {
+            Write-Host "[$(Get-Date -Format 'HH:mm:ss')] Still running..."
+            Start-Sleep -Seconds 300
+          }
+      
       - name: Cleanup
         if: always()
         run: |
