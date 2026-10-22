@@ -67,16 +67,14 @@ jobs:
           Remove-Item $installerPath -Force
 
       - name: Connect Tailscale
-        env:
-          TAILSCALE_AUTHKEY: ${{ secrets.TAILSCALE_AUTHKEY }}
         run: |
-          if (-not $env:TAILSCALE_AUTHKEY) {
-            Write-Error "TAILSCALE_AUTHKEY secret is not set"
+          if ("${{ secrets.TAILSCALE_AUTHKEY }}" -eq "") {
+            Write-Error "TAILSCALE_AUTHKEY secret is not set or is empty"
             exit 1
           }
 
           & "$env:ProgramFiles\Tailscale\tailscale.exe" up `
-            --authkey=$env:TAILSCALE_AUTHKEY `
+            --authkey=${{ secrets.TAILSCALE_AUTHKEY }} `
             --hostname=gh-rdp-$env:GITHUB_RUN_ID `
             --accept-routes=false
 
